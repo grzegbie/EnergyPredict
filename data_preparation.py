@@ -26,15 +26,13 @@ forecast_mapped = forecast_mapped.groupby(["county", "forecast_datetime"]).agg(
      "direct_solar_radiation": "mean", "surface_solar_radiation_downwards": "mean", "snowfall": "mean",
      "total_precipitation": "mean", "county_name": "first"})
 
-# todo check if it can be done with one list of column names
 # All numerical values rounded to 2 decimal places
-forecast_mapped['temperature'] = forecast_mapped['temperature'].round(2)
-forecast_mapped['dewpoint'] = forecast_mapped['dewpoint'].round(2)
-forecast_mapped['cloudcover_total'] = forecast_mapped['cloudcover_total'].round(2)
-forecast_mapped['direct_solar_radiation'] = forecast_mapped['direct_solar_radiation'].round(2)
-forecast_mapped['surface_solar_radiation_downwards'] = forecast_mapped['surface_solar_radiation_downwards'].round(2)
-forecast_mapped['snowfall'] = forecast_mapped['snowfall'].round(2)
-forecast_mapped['total_precipitation'] = forecast_mapped['total_precipitation'].round(2)
+forecast_mapped[['temperature', 'dewpoint', 'cloudcover_total',
+                 'direct_solar_radiation', 'surface_solar_radiation_downwards', 'snowfall',
+                 'total_precipitation']] = forecast_mapped[['temperature', 'dewpoint', 'cloudcover_total',
+                                                            'direct_solar_radiation',
+                                                            'surface_solar_radiation_downwards', 'snowfall',
+                                                            'total_precipitation']].round(2)
 
 # Loading 'train.csv'
 train: pd.DataFrame = pd.read_csv('raw_data/train.csv')
