@@ -136,7 +136,7 @@ print('Creating prepped_data directory...')
 try:
     os.mkdir('prepped_data', mode=0o777)
 except FileExistsError:
-    print('Directory prepped_data already exists')
+    print("Directory 'prepped_data' already exists")
 
 print('Saving prepared data to .csv...')
 forecast_weather_production.to_csv('prepped_data/forecast_weather_production.csv', index=False)

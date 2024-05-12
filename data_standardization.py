@@ -66,7 +66,7 @@ print('Creating standardized_data directory...')
 try:
     os.mkdir('standardized_data', mode=0o777)
 except FileExistsError:
-    print('Directory standardized_data already exists')
+    print("Directory 'standardized_data' already exists")
 
 print('Saving standardized data to .csv...')
 forecast_weather_production.to_csv('standardized_data/forecast_weather_production.csv', index=False)
