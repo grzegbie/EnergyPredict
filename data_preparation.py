@@ -1,12 +1,17 @@
+import os
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 
 # LOADING RAW DATA FILES
 print('Loading raw data...')
-weather_station_to_county: pd.DataFrame = pd.read_csv('raw_data/weather_station_to_county_mapping.csv')
-forecast_weather: pd.DataFrame = pd.read_csv('raw_data/forecast_weather.csv')
-historical_weather: pd.DataFrame = pd.read_csv('raw_data/historical_weather.csv')
-train: pd.DataFrame = pd.read_csv('raw_data/train.csv')
+try:
+    weather_station_to_county: pd.DataFrame = pd.read_csv('raw_data/weather_station_to_county_mapping.csv')
+    forecast_weather: pd.DataFrame = pd.read_csv('raw_data/forecast_weather.csv')
+    historical_weather: pd.DataFrame = pd.read_csv('raw_data/historical_weather.csv')
+    train: pd.DataFrame = pd.read_csv('raw_data/train.csv')
+except FileNotFoundError:
+    print('One of required data files are missing!')
+    exit(1)
 print('Raw data loaded')
 
 
@@ -127,11 +132,17 @@ historical_weather_consumption_private.drop(labels='is_business', axis='columns'
 historical_weather_production_business.drop(labels='is_business', axis='columns', inplace=True)
 historical_weather_production_private.drop(labels='is_business', axis='columns', inplace=True)
 
+print('Creating prepped_data directory...')
+try:
+    os.mkdir('prepped_data', mode=0o777)
+except FileExistsError:
+    print('Directory prepped_data already exists')
+
 print('Saving prepared data to .csv...')
-forecast_weather_production.to_csv('prepped_data/forecast_weather_production.csv')
-forecast_weather_consumption.to_csv('prepped_data/forecast_weather_consumption.csv')
-historical_weather_consumption_business.to_csv('prepped_data/historical_weather_consumption_business.csv')
-historical_weather_consumption_private.to_csv('prepped_data/historical_weather_consumption_private.csv')
-historical_weather_production_business.to_csv('prepped_data/historical_weather_production_business.csv')
-historical_weather_production_private.to_csv('prepped_data/historical_weather_production_private.csv')
+forecast_weather_production.to_csv('prepped_data/forecast_weather_production.csv', index=False)
+forecast_weather_consumption.to_csv('prepped_data/forecast_weather_consumption.csv', index=False)
+historical_weather_consumption_business.to_csv('prepped_data/historical_weather_consumption_business.csv', index=False)
+historical_weather_consumption_private.to_csv('prepped_data/historical_weather_consumption_private.csv', index=False)
+historical_weather_production_business.to_csv('prepped_data/historical_weather_production_business.csv', index=False)
+historical_weather_production_private.to_csv('prepped_data/historical_weather_production_private.csv', index=False)
 print('Data saved')
