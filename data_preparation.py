@@ -1,6 +1,27 @@
 import os
 import pandas as pd
+from config import Config
+
 pd.options.mode.chained_assignment = None  # default='warn'
+
+
+def clip_values(dataset: pd.DataFrame, factor: float = 1.5, is_historical: bool = True) -> pd.DataFrame:
+    if is_historical:
+        for column_name in Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES+Config.USED_TARGET:
+            q1 = dataset[column_name].quantile(0.25)
+            q3 = dataset[column_name].quantile(0.75)
+            iqr = (q3 - q1)
+            clip_val = q3 + (factor * iqr)
+            dataset[column_name] = dataset[column_name].clip(upper=clip_val)
+    else:
+        for column_name in Config.FORECAST_NORMALIZED_NUMERICAL_FEATURES+Config.USED_TARGET:
+            q1 = dataset[column_name].quantile(0.25)
+            q3 = dataset[column_name].quantile(0.75)
+            iqr = (q3 - q1)
+            clip_val = q3 + (factor * iqr)
+            dataset[column_name] = dataset[column_name].clip(upper=clip_val)
+    return dataset
+
 
 # LOADING RAW DATA FILES
 print('Loading raw data...')
@@ -13,7 +34,6 @@ except FileNotFoundError:
     print('One of required data files are missing!')
     exit(1)
 print('Raw data loaded')
-
 
 # DATA PREPARATION
 print('Preparing weather_station_to_county...')
@@ -131,6 +151,15 @@ historical_weather_consumption_business.drop(labels='is_business', axis='columns
 historical_weather_consumption_private.drop(labels='is_business', axis='columns', inplace=True)
 historical_weather_production_business.drop(labels='is_business', axis='columns', inplace=True)
 historical_weather_production_private.drop(labels='is_business', axis='columns', inplace=True)
+
+# Clipping values outside 1.5 IQR
+forecast_weather_production = clip_values(dataset=forecast_weather_production, is_historical=False)
+forecast_weather_consumption = clip_values(dataset=forecast_weather_consumption, is_historical=False)
+
+historical_weather_consumption_business = clip_values(dataset=historical_weather_consumption_business)
+historical_weather_consumption_private = clip_values(dataset=historical_weather_consumption_private)
+historical_weather_production_business = clip_values(dataset=historical_weather_production_business)
+historical_weather_production_private = clip_values(dataset=historical_weather_production_private)
 
 print('Creating prepped_data directory...')
 try:

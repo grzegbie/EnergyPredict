@@ -4,32 +4,28 @@ from sklearn import preprocessing
 from config import Config
 
 
-def standardize_historical_data(dataset: pd.DataFrame) -> pd.DataFrame:
+def standardize_data(dataset: pd.DataFrame, is_historical: bool = True) -> pd.DataFrame:
     min_max_scaler = preprocessing.MinMaxScaler()
-    dataset[Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES] = min_max_scaler.fit_transform(
-        dataset[Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES])
+    if is_historical:
+        dataset[Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES+Config.USED_TARGET] = min_max_scaler.fit_transform(
+            dataset[Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES+Config.USED_TARGET])
 
-    dataset_dummies: pd.DataFrame = pd.get_dummies(
-        data=dataset[Config.HISTORICAL_ENCODED_CATEGORICAL_FEATURES],
-        columns=Config.HISTORICAL_ENCODED_CATEGORICAL_FEATURES)
+        dataset_dummies: pd.DataFrame = pd.get_dummies(
+            data=dataset[Config.HISTORICAL_ENCODED_CATEGORICAL_FEATURES],
+            columns=Config.HISTORICAL_ENCODED_CATEGORICAL_FEATURES)
 
-    dataset.drop(labels=Config.HISTORICAL_ENCODED_CATEGORICAL_FEATURES, axis='columns', inplace=True)
-    dataset = pd.concat([dataset, dataset_dummies], axis=1)
+        dataset.drop(labels=Config.HISTORICAL_ENCODED_CATEGORICAL_FEATURES, axis='columns', inplace=True)
+        dataset = pd.concat([dataset, dataset_dummies], axis=1)
+    else:
+        dataset[Config.FORECAST_NORMALIZED_NUMERICAL_FEATURES + Config.USED_TARGET] = min_max_scaler.fit_transform(
+            dataset[Config.FORECAST_NORMALIZED_NUMERICAL_FEATURES + Config.USED_TARGET])
 
-    return dataset
+        dataset_dummies: pd.DataFrame = pd.get_dummies(
+            data=dataset[Config.FORECAST_ENCODED_CATEGORICAL_FEATURES],
+            columns=Config.FORECAST_ENCODED_CATEGORICAL_FEATURES)
 
-
-def standardize_forecast_data(dataset: pd.DataFrame) -> pd.DataFrame:
-    min_max_scaler = preprocessing.MinMaxScaler()
-    dataset[Config.FORECAST_NORMALIZED_NUMERICAL_FEATURES] = min_max_scaler.fit_transform(
-        dataset[Config.FORECAST_NORMALIZED_NUMERICAL_FEATURES])
-
-    dataset_dummies: pd.DataFrame = pd.get_dummies(
-        data=dataset[Config.FORECAST_ENCODED_CATEGORICAL_FEATURES],
-        columns=Config.FORECAST_ENCODED_CATEGORICAL_FEATURES)
-
-    dataset.drop(labels=Config.FORECAST_ENCODED_CATEGORICAL_FEATURES, axis='columns', inplace=True)
-    dataset = pd.concat([dataset, dataset_dummies], axis=1)
+        dataset.drop(labels=Config.FORECAST_ENCODED_CATEGORICAL_FEATURES, axis='columns', inplace=True)
+        dataset = pd.concat([dataset, dataset_dummies], axis=1)
 
     return dataset
 
@@ -54,13 +50,13 @@ print('Data loaded')
 
 # Data standardization
 print('Standardizing features...')
-forecast_weather_production = standardize_forecast_data(forecast_weather_production)
-forecast_weather_consumption = standardize_forecast_data(forecast_weather_consumption)
+forecast_weather_production = standardize_data(dataset=forecast_weather_production, is_historical=False)
+forecast_weather_consumption = standardize_data(dataset=forecast_weather_consumption, is_historical=False)
 
-historical_weather_consumption_business = standardize_historical_data(historical_weather_consumption_business)
-historical_weather_consumption_private = standardize_historical_data(historical_weather_consumption_private)
-historical_weather_production_business = standardize_historical_data(historical_weather_production_business)
-historical_weather_production_private = standardize_historical_data(historical_weather_production_private)
+historical_weather_consumption_business = standardize_data(dataset=historical_weather_consumption_business)
+historical_weather_consumption_private = standardize_data(dataset=historical_weather_consumption_private)
+historical_weather_production_business = standardize_data(dataset=historical_weather_production_business)
+historical_weather_production_private = standardize_data(dataset=historical_weather_production_private)
 
 print('Creating standardized_data directory...')
 try:
