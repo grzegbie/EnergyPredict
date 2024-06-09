@@ -7,14 +7,14 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 def clip_values(dataset: pd.DataFrame, factor: float = 1.5, is_historical: bool = True) -> pd.DataFrame:
     if is_historical:
-        for column_name in Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES+Config.USED_TARGET:
+        for column_name in Config.HISTORICAL_CLIPPED_NUMERICAL_FEATURES+Config.USED_TARGET:
             q1 = dataset[column_name].quantile(0.25)
             q3 = dataset[column_name].quantile(0.75)
             iqr = (q3 - q1)
             clip_val = q3 + (factor * iqr)
             dataset[column_name] = dataset[column_name].clip(upper=clip_val)
     else:
-        for column_name in Config.FORECAST_NORMALIZED_NUMERICAL_FEATURES+Config.USED_TARGET:
+        for column_name in Config.FORECAST_CLIPPED_NUMERICAL_FEATURES+Config.USED_TARGET:
             q1 = dataset[column_name].quantile(0.25)
             q3 = dataset[column_name].quantile(0.75)
             iqr = (q3 - q1)

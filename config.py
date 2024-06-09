@@ -4,11 +4,19 @@ class Config:
                                               'direct_solar_radiation', 'surface_solar_radiation_downwards', 'snowfall',
                                               'total_precipitation']
 
+    FORECAST_CLIPPED_NUMERICAL_FEATURES = ['latitude', 'longitude', 'temperature',
+                                           'direct_solar_radiation', 'surface_solar_radiation_downwards', 'snowfall',
+                                           'total_precipitation']
+
     FORECAST_ENCODED_CATEGORICAL_FEATURES = ['is_business', 'product_type']
 
     HISTORICAL_NORMALIZED_NUMERICAL_FEATURES = ['latitude', 'longitude', 'temperature', 'rain', 'snowfall',
                                                 'cloudcover_total', 'shortwave_radiation', 'direct_solar_radiation',
                                                 'diffuse_radiation']
+
+    HISTORICAL_CLIPPED_NUMERICAL_FEATURES = ['latitude', 'longitude', 'temperature', 'rain', 'snowfall',
+                                             'shortwave_radiation', 'direct_solar_radiation',
+                                             'diffuse_radiation']
 
     HISTORICAL_ENCODED_CATEGORICAL_FEATURES = ['product_type']
 
