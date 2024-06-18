@@ -53,8 +53,8 @@ def save_model(regressor: object, filename: str) -> None:
 # FORECAST DATA MODELS
 print('Loading forecast data...')
 try:
-    forecast_weather_production: pd.DataFrame = pd.read_csv('standardized_data/forecast_weather_production.csv')
-    forecast_weather_consumption: pd.DataFrame = pd.read_csv('standardized_data/forecast_weather_consumption.csv')
+    forecast_weather_production: pd.DataFrame = pd.read_csv('normalized_data/forecast_weather_production.csv')
+    forecast_weather_consumption: pd.DataFrame = pd.read_csv('normalized_data/forecast_weather_consumption.csv')
 except FileNotFoundError:
     print('One of required data files are missing!')
     exit(1)
@@ -79,13 +79,13 @@ save_model(forecast_weather_consumption_model, 'models/forecast_weather_consumpt
 print('\nLoading historical data...')
 try:
     historical_weather_consumption_business: pd.DataFrame = pd.read_csv(
-        'standardized_data/historical_weather_consumption_business.csv')
+        'normalized_data/historical_weather_consumption_business.csv')
     historical_weather_consumption_private: pd.DataFrame = pd.read_csv(
-        'standardized_data/historical_weather_consumption_private.csv')
+        'normalized_data/historical_weather_consumption_private.csv')
     historical_weather_production_business: pd.DataFrame = pd.read_csv(
-        'standardized_data/historical_weather_production_business.csv')
+        'normalized_data/historical_weather_production_business.csv')
     historical_weather_production_private: pd.DataFrame = pd.read_csv(
-        'standardized_data/historical_weather_production_private.csv')
+        'normalized_data/historical_weather_production_private.csv')
 except FileNotFoundError:
     print('One of required data files are missing!')
     exit(1)
