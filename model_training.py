@@ -74,7 +74,6 @@ except FileExistsError:
 save_model(forecast_weather_production_model, 'models/forecast_weather_production_model.pkl')
 save_model(forecast_weather_consumption_model, 'models/forecast_weather_consumption_model.pkl')
 
-
 # HISTORICAL DATA MODELS
 print('\nLoading historical data...')
 try:

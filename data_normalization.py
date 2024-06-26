@@ -5,10 +5,11 @@ from config import Config
 
 
 def normalize_data(dataset: pd.DataFrame, is_historical: bool = True) -> pd.DataFrame:
+    """Method normalizing both categorical and numerical data"""
     min_max_scaler = preprocessing.MinMaxScaler()
     if is_historical:
-        dataset[Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES+Config.USED_TARGET] = min_max_scaler.fit_transform(
-            dataset[Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES+Config.USED_TARGET])
+        dataset[Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES + Config.USED_TARGET] = min_max_scaler.fit_transform(
+            dataset[Config.HISTORICAL_NORMALIZED_NUMERICAL_FEATURES + Config.USED_TARGET])
 
         dataset_dummies: pd.DataFrame = pd.get_dummies(
             data=dataset[Config.HISTORICAL_ENCODED_CATEGORICAL_FEATURES],

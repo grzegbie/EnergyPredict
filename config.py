@@ -1,4 +1,5 @@
 class Config:
+    """Class containing all configuration parameters"""
     # Data preparation and standardization parameters
     FORECAST_NORMALIZED_NUMERICAL_FEATURES = ['latitude', 'longitude', 'temperature', 'cloudcover_total',
                                               'direct_solar_radiation', 'surface_solar_radiation_downwards', 'snowfall',
